@@ -1,0 +1,23 @@
+<!-- views/equipmentItem.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hockey Shop - Equipment Item</title>
+</head>
+<body>
+  <!-- Equipment Item Details -->
+  <h1><%= equipment.name %></h1>
+  <img src="<%= item.image %>" alt="<%= item.name %> Image" width="150">
+  <p><%= equipment.description %></p>
+  <p>Price: <%= equipment.price_in_cents / 100 %> USD</p>
+  <!-- Add more details as needed -->
+
+  <!-- Buy Button or Add to Cart Button -->
+  <button>Buy</button>
+
+  <a href="/">Back to Home</a>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!-- views/item_details.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hockey Shop - Item Details</title>
+</head>
+<body>
+  <h1><%= item.name %> Details</h1>
+
+  <img src="<%= item.image %>" alt="<%= item.name %> Image" width="300">
+
+  <p><strong>Description:</strong> <%= item.description %></p>
+  <p><strong>Price:</strong> $<%= item.price_in_cents / 100 %></p>
+  <p><strong>Category:</strong> <%= item.category %></p>
+  <p><strong>Rating:</strong> <%= item.rating %></p>
+
+  <!-- Add more details based on your equipment schema -->
+
+  <form action="/add-to-cart" method="post">
+    <input type="hidden" name="userId" value="<%= user ? user.id : '' %>">
+    <input type="hidden" name="itemId" value="<%= item.id %>">
+    <input type="number" name="quantity" value="1" min="1">
+    <button type="submit">Add to Cart</button>
+  </form>
+
+  <a href="/index">Back to All Items</a>
+
+</body>
+</html>
