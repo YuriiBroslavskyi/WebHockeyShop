@@ -33,10 +33,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cookieParser());
 app.use(session({
-    secret: 'your_session_secret', // Change this to a secret key
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Set to true if your application is served over HTTPS
+    cookie: { secure: false },
 }));
 app.set('view engine', 'ejs');
 
