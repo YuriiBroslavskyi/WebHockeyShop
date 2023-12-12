@@ -1,10 +1,11 @@
-<!-- views/index.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hockey Shop - All Items</title>
+  <link rel="stylesheet" type="text/css" href="/public/styles.css">
+
 </head>
 <body>
   <% if (user) { %>
@@ -37,5 +38,10 @@
     <p>No items available at the moment.</p>
   <% } %>
 
+  <!-- Shopping cart button -->
+  <a href="/cart">
+    <button class="cart-button">View Shopping Cart</button>
+  </a>
+  
 </body>
 </html>

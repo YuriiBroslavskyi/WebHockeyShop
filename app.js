@@ -8,9 +8,10 @@ const PORT = process.env.PORT || 3000;
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const path = require('path'); 
 
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Database connection
 const db = mysql.createConnection({
@@ -160,9 +161,6 @@ app.post('/signup', (req, res) => {
 });
 // Add item to shopping cart
 
-
-// Handle form submission for adding items to the cart
-
 // Handle form submission for adding items to the cart
 app.post('/add-to-cart', (req, res) => {
     const userId = req.body.userId;
@@ -201,7 +199,7 @@ app.post('/add-to-cart', (req, res) => {
             updateShoppingCart(userId, updatedCart, (updateErr) => {
                 if (updateErr) {
                     const error = 'Internal Server Error';
-                    return res.render('cart', { cart: null, error });
+                    return res.render('cart', { cart: null, error});
                 }
 
                 // Render the cart view with updated cart and item details
@@ -210,11 +208,6 @@ app.post('/add-to-cart', (req, res) => {
         });
     });
 });
-
-
-
-// View shopping cart
-// View shopping cart
 
 // View shopping cart
 app.get('/cart', (req, res) => {
@@ -277,7 +270,7 @@ app.post('/complete-purchase', (req, res) => {
                     return res.status(500).send('Internal Server Error');
                 }
 
-                res.redirect('/index'); // Redirect to the main page after completing the purchase
+                res.redirect('/'); // Redirect to the main page after completing the purchase
             });
         });
     });
@@ -417,6 +410,7 @@ function addToCart(cart, item, quantity) {
             name: item.name,
             description: item.description,
             price_in_cents: item.price_in_cents,
+            image: item.image,
             quantity: parseInt(quantity, 10), // Parse quantity to ensure it's an integer
         };
 
@@ -465,18 +459,18 @@ function clearShoppingCart(userId, callback) {
     });
 }
 // Helper function to clear the user's shopping cart
-function clearShoppingCart(userId, callback) {
-    const updateQuery = 'UPDATE shopping_carts SET cart_items = ? WHERE user_id = ? AND order_status = ?';
+// function clearShoppingCart(userId, callback) {
+//     const updateQuery = 'UPDATE shopping_carts SET cart_items = ? WHERE user_id = ? AND order_status = ?';
 
-    // Clear the cart_items in the database
-    db.query(updateQuery, ['[]', userId, 'In Progress'], (updateErr) => {
-        if (updateErr) {
-            return callback(updateErr);
-        }
+//     // Clear the cart_items in the database
+//     db.query(updateQuery, ['[]', userId, 'In Progress'], (updateErr) => {
+//         if (updateErr) {
+//             return callback(updateErr);
+//         }
 
-        callback(null);
-    });
-}
+//         callback(null);
+//     });
+// }
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
