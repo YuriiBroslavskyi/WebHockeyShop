@@ -396,7 +396,6 @@ function getOrCreateShoppingCart(userId, callback) {
 }
 
 // Helper function to add an item to the shopping cart
-// Helper function to add an item to the shopping cart
 function addToCart(cart, item, quantity) {
     const existingItemIndex = cart.cart_items.findIndex(cartItem => cartItem.id === item.id);
 
