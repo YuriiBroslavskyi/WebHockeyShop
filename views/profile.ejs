@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link rel="stylesheet" type="text/css" href="/public/styles.css">
+</head>
+<body>
+
+    <header class = "header">
+
+        <div class="site-name">
+          <img id="TheRinkLogo" src="/public/images/TheRinkLogo-removebg-preview.png" alt="TheRinkLogo" >
+        </div>
+        <div class="header-anchors">
+    
+      <div class="shopping-cart">
+        <a href="/cart">
+          <img src="/public/images/shopping-cart-icon.png" alt="Shopping Cart Icon" width="30">
+        </a>
+      </div>
+    
+        </div>
+    
+      </header>
+
+  <h1>User Profile</h1>
+
+  <% if (user) { %>
+    <h2>Welcome, <%= user.user_email %></h2>
+    <p><strong>Email:</strong> <%= user.user_email %></p>
+    <p><strong>Registration Time:</strong> <%= user.created_at %></p>
+
+    <h3>Order History</h3>
+    <% if (user.orders && user.orders.length > 0) { %>
+      <ul>
+        <% user.orders.forEach(order => { %>
+          <li>
+            <p><strong>Order ID:</strong> <%= order.id %></p>
+            <p><strong>Status:</strong> <%= order.order_status %></p>
+            <p><strong>Total:</strong> $<%= (order.total_sum_in_cents / 100).toFixed(2) %></p>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>No orders yet.</p>
+    <% } %>
+
+    <form action="/change-password" method="post">
+      <button type="submit">Change Password</button>
+    </form>
+
+    <a href="/">Back to Home</a>
+  <% } else { %>
+    <p>Error loading user profile.</p>
+  <% } %>
+
+</body>
+</html>

@@ -6,47 +6,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hockey Shop - Shopping Cart</title>
   <link rel="stylesheet" type="text/css" href="/public/styles.css">
-  <link rel="icon" type="image/png" href="/public/images/LogoHockeyLogo2.png"/>
-
 </head>
 <body>
-  <h1>Shopping Cart</h1>
+  <header class = "header">
 
-  <% if (cart && cart.cart_items) { %>
-    <% if (typeof cart.cart_items === 'string') { %>
-      <% cart.cart_items = JSON.parse(cart.cart_items); %>
-    <% } %>
+    <div class="site-name">
+      <img id="TheRinkLogo" src="/public/images/TheRinkLogo-removebg-preview.png" alt="TheRinkLogo" >
+    </div>
+    <div class="header-anchors">
 
-    <% if (cart.cart_items.length > 0) { %>
-      <ul>
-        <% cart.cart_items.forEach(cartItem => { %>
-          <li>
-            <h2><%= cartItem.name %></h2>
-            <img src="<%= cartItem.image %>" alt="<%= cartItem.name %> Image" width="150">
-            <p><strong>Quantity:</strong> <%= cartItem.quantity %></p>
-            <p><strong>Price:</strong> $<%= (cartItem.price_in_cents * cartItem.quantity) / 100 %></p>
-            <!-- Add more details based on your equipment schema -->
-          </li>
-        <% }) %>
-      </ul>
-      <form action="/complete-purchase" method="post">
-        <button type="submit">Complete Purchase</button>
-      </form>
-      <form action="/clear-cart" method="post">
-        <button type="submit">Clear Cart</button>
-      </form>
+      <div class="profile-icon">
+        <a href="/profile">
+          <img src="/public/images/profileIcon.png" alt="Profile Icon" width="30">
+        </a>
+      </div>
+
+    </div>
+
+  </header>
+
+  <div>
+    <h1>Shopping Cart</h1>
+
+    <% if (cart && cart.cart_items) { %>
+      <% if (typeof cart.cart_items === 'string') { %>
+        <% cart.cart_items = JSON.parse(cart.cart_items); %>
+      <% } %>
+
+      <% if (cart.cart_items.length > 0) { %>
+        <ul class="cart-item-list">
+          <% cart.cart_items.forEach(cartItem => { %>
+            <li class="cart-item">
+              <h2><%= cartItem.name %></h2>
+              <img src="<%= cartItem.image %>" alt="<%= cartItem.name %> Image" width="150">
+              <p><strong>Quantity:</strong> <%= cartItem.quantity %></p>
+              <p><strong>Price:</strong> $<%= (cartItem.price_in_cents * cartItem.quantity) / 100 %></p>
+              <!-- Add more details based on your equipment schema -->
+            </li>
+          <% }) %>
+        </ul>
+        <form action="/complete-purchase" method="post">
+          <button type="submit">Complete Purchase</button>
+        </form>
+        <form action="/clear-cart" method="post">
+          <button type="submit">Clear Cart</button>
+        </form>
+      <% } else { %>
+        <p>Your shopping cart is empty.</p>
+      <% } %>
     <% } else { %>
-      <p>Your shopping cart is empty.</p>
+      <p>Error loading your shopping cart.</p>
     <% } %>
-  <% } else { %>
-    <p>Error loading your shopping cart.</p>
-  <% } %>
 
-  <% if (error) { %>
-    <p style="color: red;"><%= error %></p>
-  <% } %>
+    <% if (error) { %>
+      <p style="color: red;"><%= error %></p>
+    <% } %>
 
-  <a href="/">Back to All Items</a>
-
+    <a href="/">Back to All Items</a>
+  </div>
 </body>
 </html>

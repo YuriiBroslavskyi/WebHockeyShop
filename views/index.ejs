@@ -8,40 +8,58 @@
   <link rel="icon" type="image/png" href="/public/images/LogoHockeyLogo2.png"/>
 </head>
 <body>
-  <% if (user) { %>
-    <p>Welcome, <%= user.email %>! <a href="/logout">Logout</a></p>
-  <% } else { %>
-    <p>You are not logged in. <a href="/login">Login</a> | <a href="/signup">Sign Up</a></p>
-  <% } %>
+  <header class = "header">
 
-  <h1>All Hockey Equipment</h1>
+    <div class="site-name">
+      <img id="TheRinkLogo" src="/public/images/TheRinkLogo-removebg-preview.png" alt="TheRinkLogo" >
+    </div>
+    <div class="header-anchors">
+
+      <div class="profile-icon">
+        <a href="/profile">
+          <img src="/public/images/profileIcon.png" alt="Profile Icon" width="30">
+        </a>
+      </div>
+
+      <div class="shopping-cart">
+        <a href="/cart">
+          <img src="/public/images/shopping-cart-icon.png" alt="Shopping Cart Icon" width="30">
+        </a>
+      </div>
+
+    </div>
+
+    <div class="user-welcome">
+      <% if (user) { %>
+        <p>Welcome, <%= user.email %>! <a href="/logout">Logout</a></p>
+      <% } else { %>
+        <p>You are not logged in. <a href="/login">Login</a> | <a href="/signup">Sign Up</a></p>
+      <% } %>
+    </div>
+  </header>
+
 
   <% if (equipment.length > 0) { %>
-    <ul>
+    <ul class="equipment-list">
       <% equipment.forEach(item => { %>
-        <li>
-          <h2><%= item.name %></h2>
-          <img src="<%= item.image %>" alt="<%= item.name %> Image" width="150">
-          <p><strong>Description:</strong> <%= item.description %></p>
-          <p><strong>Price:</strong> $<%= item.price_in_cents / 100 %></p>
-          <form action="/add-to-cart" method="post">
-            <input type="hidden" name="userId" value="<%= user ? user.id : '' %>">
-            <input type="hidden" name="itemId" value="<%= item.id %>">
-            <input type="number" name="quantity" value="1" min="1">
-            <button type="submit">Add to Cart</button>
+        <li class="equipment-item" id="item-<%= item.id %>">
+          <h2 class="item-name"><%= item.name %></h2>
+          <img src="<%= item.image %>" alt="<%= item.name %> Image" width="150" class="item-image">
+          <p class="item-description"><strong>Description:</strong> <%= item.description %></p>
+          <p class="item-price"><strong>Price:</strong> $<%= item.price_in_cents / 100 %></p>
+          <form action="/add-to-cart" method="post" class="add-to-cart-form">
+            <input type="hidden" name="userId" value="<%= user ? user.id : '' %>" class="user-id-input">
+            <input type="hidden" name="itemId" value="<%= item.id %>" class="item-id-input">
+            <input type="number" name="quantity" value="1" min="1" class="quantity-input">
+            <button type="submit" class="add-to-cart-button">Add to Cart</button>
           </form>
-          <a href="/item/<%= item.id %>">View Details</a>
+          <a href="/item/<%= item.id %>" class="view-details-link">View Details</a>
         </li>
       <% }) %>
     </ul>
   <% } else { %>
-    <p>No items available at the moment.</p>
+    <p class="no-items-message">No items available at the moment.</p>
   <% } %>
-
-  <!-- Shopping cart button -->
-  <a href="/cart">
-    <button class="cart-button">View Shopping Cart</button>
-  </a>
   
 </body>
 </html>

@@ -81,6 +81,90 @@ app.get('/signup', (req, res) => {
     res.render('signup', { error: undefined });
 });
 
+app.get('/profile', (req, res) => {
+    const userId = req.session.user ? req.session.user.id : null;
+
+    // Fetch user data and their order history from the database
+    getUserDataAndOrders(userId, (err, userData) => {
+        if (err) {
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.render('profile', { user: userData, error: null });
+    });
+});
+
+// Add this route to your existing code
+app.get('/change-password', (req, res) => {
+    // Check if the user is logged in
+    if (req.session.user) {
+        const userEmail = req.session.user.email;
+        res.render('change_password', { userEmail });
+    } else {
+        // Redirect to the login page if the user is not logged in
+        res.redirect('/login');
+    }
+});
+
+  
+  app.post('/change-password', (req, res) => {
+    const userId = req.session.user ? req.session.user.id : null;
+    const currentPassword = req.body.currentPassword;
+    const newPassword = req.body.newPassword;
+    const confirmPassword = req.body.confirmPassword;
+    const userEmail = req.session.user.email ? req.session.user.email : null;
+
+    // Check if the user is logged in
+    if (!userEmail) {
+      return res.status(401).render('change_password', { user: null, error: 'You are not logged in.' });
+    }
+  
+    // Validate the input
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res.status(400).render('change_password', { user: req.session.user, error: 'All fields are required.' });
+    }
+  
+    // Retrieve user data from the database
+    getUserDataById(userId, (getUserErr, user) => {
+      if (getUserErr) {
+        return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
+      }
+  
+      // Validate the current password
+      validatePassword(currentPassword, user.password_hash, user.password_salt, (validateErr, passwordMatch) => {
+        if (validateErr) {
+          return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
+        }
+  
+        if (!passwordMatch) {
+          return res.render('change_password', { user: req.session.user, error: 'Current password is incorrect.' });
+        }
+  
+        // Validate the new password
+        if (newPassword !== confirmPassword) {
+          return res.render('change_password', { user: req.session.user, error: 'New passwords do not match.' });
+        }
+  
+        // Hash the new password
+        hashPassword(newPassword, (hashErr, hashedPassword, salt) => {
+          if (hashErr) {
+            return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
+          }
+  
+          // Update the user's password in the database
+          updateUserPassword(userId, hashedPassword, salt, (updateErr) => {
+            if (updateErr) {
+              return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
+            }
+  
+            // Redirect to the profile page or home after successful password change
+            res.redirect('/profile');
+          });
+        });
+      });
+    });
+  });
+
 // Handle login form submission
 app.post('/login', (req, res) => {
     const { emailOrPhone, password } = req.body;
@@ -203,7 +287,7 @@ app.post('/add-to-cart', (req, res) => {
                 }
 
                 // Render the cart view with updated cart and item details
-                res.redirect('/cart');
+                res.redirect('/');
             });
         });
     });
@@ -457,6 +541,35 @@ function clearShoppingCart(userId, callback) {
         callback(null);
     });
 }
+
+// Helper function to fetch user data and order history
+function getUserDataAndOrders(userId, callback) {
+    const userQuery = 'SELECT * FROM user_info WHERE id = ?';
+    const ordersQuery = 'SELECT * FROM user_orders WHERE user_id = ?';
+
+    db.query(userQuery, [userId], (userErr, userResult) => {
+        if (userErr) {
+            return callback(userErr, null);
+        }
+
+        const user = userResult[0];
+
+        // If the user exists, fetch their order history
+        if (user) {
+            db.query(ordersQuery, [userId], (ordersErr, ordersResult) => {
+                if (ordersErr) {
+                    return callback(ordersErr, null);
+                }
+
+                const userWithOrders = { ...user, orders: ordersResult };
+                callback(null, userWithOrders);
+            });
+        } else {
+            callback(null, null);
+        }
+    });
+}
+
 // Helper function to clear the user's shopping cart
 // function clearShoppingCart(userId, callback) {
 //     const updateQuery = 'UPDATE shopping_carts SET cart_items = ? WHERE user_id = ? AND order_status = ?';
@@ -470,6 +583,34 @@ function clearShoppingCart(userId, callback) {
 //         callback(null);
 //     });
 // }
+
+// Helper function to retrieve user data by ID from the database
+function getUserDataById(userId, callback) {
+    const query = 'SELECT * FROM user_info WHERE id = ?';
+  
+    db.query(query, [userId], (err, results) => {
+      if (err) {
+        console.error('Error querying user data from the database:', err);
+        callback(err, null);
+      } else {
+        const user = results[0];
+        callback(null, user);
+      }
+    });
+  }
+  
+  // Helper function to update the user's password in the database
+  function updateUserPassword(userId, hashedPassword, salt, callback) {
+    const updateQuery = 'UPDATE user_info SET password_hash = ?, password_salt = ? WHERE id = ?';
+  
+    db.query(updateQuery, [hashedPassword, salt, userId], (updateErr) => {
+      if (updateErr) {
+        callback(updateErr);
+      } else {
+        callback(null);
+      }
+    });
+  }
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

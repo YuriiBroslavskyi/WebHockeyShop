@@ -1,36 +1,50 @@
 <!-- views/login.ejs -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hockey Shop - Login</title>
   <link rel="stylesheet" type="text/css" href="/public/styles.css">
-  <link rel="icon" type="image/png" href="/public/images/LogoHockeyLogo2.png"/>
+  <link rel="icon" type="image/png" href="/public/images/LogoHockeyLogo2.png" />
 
 </head>
+
 <body>
-  <h1>Login</h1>
+  <header class="header">
 
-  <% if (error) { %>
-    <p style="color: red;"><%= error %></p>
-  <% } %>
+    <div class="site-name">
+      <img id="TheRinkLogo" src="/public/images/TheRinkLogo-removebg-preview.png" alt="TheRinkLogo">
+    </div>
 
-  <form action="/login" method="post">
-    <!-- Email/Phone Number Field -->
-    <label for="emailOrPhone">Email / Phone Number:</label>
-    <input type="text" id="emailOrPhone" name="emailOrPhone" required>
-    
-    <!-- Password Field -->
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    
-    <!-- "Don't have an account?" Button -->
-    <p>Don't have an account? <a href="/signup">Sign Up</a></p>
-    
-    <!-- Login Button -->
-    <button type="submit">Login</button>
-  </form>
 
+  </header>
+  <div class="login-form">
+    <h1>Login</h1>
+
+    <% if (error) { %>
+      <p style="color: red;">
+        <%= error %>
+      </p>
+      <% } %>
+
+        <form action="/login" method="post">
+          <!-- Email/Phone Number Field -->
+          <label for="emailOrPhone">Email / Phone Number:</label>
+          <input type="text" id="emailOrPhone" name="emailOrPhone" required>
+
+          <!-- Password Field -->
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required>
+
+          <!-- "Don't have an account?" Button -->
+          <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+
+          <!-- Login Button -->
+          <button type="submit">Login</button>
+        </form>
+  </div>
 </body>
+
 </html>

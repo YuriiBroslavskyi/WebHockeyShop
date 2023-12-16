@@ -1,11 +1,8 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0;
-    padding: 20px;
-}
-
-h1 {
-    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
 }
 
 ul {
@@ -23,7 +20,7 @@ li {
 }
 
 button {
-    background-color: #4caf50;
+    background-color: #FCBF49;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -37,10 +34,115 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #FCB322;
 }
 
 a {
-    color: #007bff;
+    color: #2D54C8;
     text-decoration: none;
+}
+
+.login-form {
+    margin: 10px;
+}
+
+/* Header styles */
+
+header {
+    margin: 0;
+    padding: 10px;
+    background-color: #0A122A;
+    color: white;
+    text-align: center;
+    align-items: flex-start;
+    justify-content: space-between;
+    display: flex;
+    position: relative;
+}
+
+#TheRinkLogo{
+    width: 125px;
+    height: 125px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-anchors{
+    position: absolute; /* Set the shopping cart as an absolute positioned element */
+    bottom: 0;
+    right: 0;
+    margin: 10px; /* Adjust the margin as needed */
+    margin: 10px;
+    color: #fff;
+    display: flex;
+    gap: 50px;
+}
+.user-welcome{
+    text-align: right;
+    margin: 0;
+}
+
+/* Main content styles */
+.all-items-header {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.equipment-list, .cart-item-list {
+  list-style: none;
+  padding: 0;
+  display: flex; /* Display items in a row */
+  flex-wrap: wrap; /* Allow items to wrap to the next row */
+  justify-content: space-around; /* Center items horizontally with space around */
+}
+
+.equipment-item, .cart-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  margin: 10px;
+  padding: 20px;
+  text-align: center;
+  min-width: 250px;
+  max-width: 250px; /* Limit width of each item */
+}
+
+.item-name {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.item-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.item-description,
+.item-price {
+  margin-bottom: 10px;
+}
+
+.add-to-cart-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quantity-input {
+  width: 50px;
+  margin-bottom: 10px;
+}
+
+.add-to-cart-button {
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.view-details-link {
+  display: block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #333;
 }
