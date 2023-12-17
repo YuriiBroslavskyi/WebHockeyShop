@@ -67,6 +67,9 @@ header {
     justify-content: space-between;
     align-items: center;
 }
+.equipment-item:hover {
+  transform: scale(1.05);
+}
 
 .header-anchors{
     position: absolute; /* Set the shopping cart as an absolute positioned element */
@@ -105,6 +108,8 @@ header {
   text-align: center;
   min-width: 250px;
   max-width: 250px; /* Limit width of each item */
+  box-shadow: 0 0 8px #0A122A;
+  transition: transform 0.3s ease;
 }
 
 .item-name {
@@ -145,4 +150,18 @@ header {
   margin-top: 10px;
   text-decoration: none;
   color: #333;
+}
+
+.login-label-email, 
+.login-input-email, 
+.login-label-password, 
+.login-label-password, 
+.register-label-email, 
+.register-input-email, 
+.register-label-password, 
+.register-input-password, 
+.register-label-conf-password, 
+.register-input-conf-password {
+  display: block;
+  margin: 10px;
 }

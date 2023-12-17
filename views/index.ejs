@@ -47,16 +47,36 @@
           <img src="<%= item.image %>" alt="<%= item.name %> Image" width="150" class="item-image">
           <p class="item-description"><strong>Description:</strong> <%= item.description %></p>
           <p class="item-price"><strong>Price:</strong> $<%= item.price_in_cents / 100 %></p>
-          <form action="/add-to-cart" method="post" class="add-to-cart-form">
-            <input type="hidden" name="userId" value="<%= user ? user.id : '' %>" class="user-id-input">
-            <input type="hidden" name="itemId" value="<%= item.id %>" class="item-id-input">
-            <input type="number" name="quantity" value="1" min="1" class="quantity-input">
-            <button type="submit" class="add-to-cart-button">Add to Cart</button>
-          </form>
+          
+          <!-- Parse the sizes string to convert it into a JavaScript object -->
+          <% const sizes = JSON.parse(item.sizes); %>
+          
+          <!-- Check if sizes is an array before trying to iterate over it -->
+          <% if (Array.isArray(sizes.size)) { %>
+            <!-- Populate the dropdown with available sizes for the item -->
+            <p><strong>Sizes:</strong> <%= sizes.size.join(', ') %></p>
+            <form action="/add-to-cart" method="post" class="add-to-cart-form">
+              <input type="hidden" name="userId" value="<%= user ? user.id : '' %>" class="user-id-input">
+              <input type="hidden" name="itemId" value="<%= item.id %>" class="item-id-input">
+              
+              <select name="size" class="size-dropdown">
+                <% sizes.size.forEach(size => { %>
+                  <option value="<%= size %>"><%= size %></option>
+                <% }) %>
+              </select>
+              
+              <input type="number" name="quantity" value="1" min="1" class="quantity-input">
+              <button type="submit" class="add-to-cart-button">Add to Cart</button>
+            </form>
+          <% } else { %>
+            <p>No sizes available</p>
+          <% } %>
+          
           <a href="/item/<%= item.id %>" class="view-details-link">View Details</a>
         </li>
       <% }) %>
     </ul>
+    
   <% } else { %>
     <p class="no-items-message">No items available at the moment.</p>
   <% } %>

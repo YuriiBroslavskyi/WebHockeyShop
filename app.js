@@ -250,6 +250,7 @@ app.post('/add-to-cart', (req, res) => {
     const userId = req.body.userId;
     const itemId = req.body.itemId;
     const quantity = req.body.quantity;
+    const size = req.body.size;
 
     // Check if the quantity is a valid integer
     if (!Number.isInteger(parseInt(quantity, 10)) || parseInt(quantity, 10) <= 0) {
@@ -257,7 +258,7 @@ app.post('/add-to-cart', (req, res) => {
         return res.render('cart', { cart: null, error });
     }
 
-    // Fetch item details including the image based on itemId
+    // Fetch item details including the image and sizes based on itemId
     getEquipmentItemData(itemId, (err, item) => {
         if (err) {
             const error = 'Internal Server Error';
@@ -277,21 +278,23 @@ app.post('/add-to-cart', (req, res) => {
             }
 
             // Add the item to the cart
-            const updatedCart = addToCart(cart, item, parseInt(quantity, 10));
+            const updatedCart = addToCart(cart, item, parseInt(quantity, 10), size);
 
             // Update the shopping cart in the database
             updateShoppingCart(userId, updatedCart, (updateErr) => {
                 if (updateErr) {
                     const error = 'Internal Server Error';
-                    return res.render('cart', { cart: null, error});
+                    return res.render('cart', { cart: null, error });
                 }
 
-                // Render the cart view with updated cart and item details
-                res.redirect('/');
+                // Redirect to the cart view
+                res.redirect('/cart');
             });
         });
     });
 });
+
+
 
 // View shopping cart
 app.get('/cart', (req, res) => {
@@ -315,7 +318,7 @@ app.get('/cart', (req, res) => {
                     if (itemErr) {
                         reject(itemErr);
                     } else {
-                        resolve({ ...cartItem, image: item.image });
+                        resolve({ ...cartItem, image: item.image});
                     }
                 });
             });
@@ -425,10 +428,15 @@ function getEquipmentItemData(itemId, callback) {
             callback(err, null);
         } else {
             const item = results[0];
+            if (item && item.sizes) {
+                // Parse the sizes string into an array of size objects
+                item.sizes = JSON.parse(item.sizes);
+            }
             callback(null, item);
         }
     });
 }
+
 
 function getUserDataByEmail(email, callback) {
     const query = 'SELECT * FROM user_info WHERE user_email = ?';
@@ -443,7 +451,7 @@ function getUserDataByEmail(email, callback) {
         }
     });
 }
-// Helper function to retrieve or create the user's shopping cart
+
 // Helper function to retrieve or create the user's shopping cart
 function getOrCreateShoppingCart(userId, callback) {
     const selectQuery = 'SELECT * FROM shopping_carts WHERE user_id = ? AND order_status = ?';
@@ -480,11 +488,11 @@ function getOrCreateShoppingCart(userId, callback) {
 }
 
 // Helper function to add an item to the shopping cart
-function addToCart(cart, item, quantity) {
-    const existingItemIndex = cart.cart_items.findIndex(cartItem => cartItem.id === item.id);
+function addToCart(cart, item, quantity, size) {
+    const existingItemIndex = cart.cart_items.findIndex(cartItem => cartItem.id === item.id && cartItem.size === size);
 
     if (existingItemIndex !== -1) {
-        // Item already exists in the cart, update quantity
+        // Item with the same ID and size already exists in the cart, update quantity
         cart.cart_items[existingItemIndex].quantity += quantity;
     } else {
         // Add a new item to the cart
@@ -495,6 +503,7 @@ function addToCart(cart, item, quantity) {
             price_in_cents: item.price_in_cents,
             image: item.image,
             quantity: parseInt(quantity, 10), // Parse quantity to ensure it's an integer
+            size
         };
 
         cart.cart_items.push(newItem);
@@ -502,6 +511,7 @@ function addToCart(cart, item, quantity) {
 
     return cart;
 }
+
 
 // Helper function to update the shopping cart in the database
 function updateShoppingCart(userId, cart, callback) {

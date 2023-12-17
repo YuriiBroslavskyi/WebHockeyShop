@@ -36,12 +36,12 @@
       <% if (cart.cart_items.length > 0) { %>
         <ul class="cart-item-list">
           <% cart.cart_items.forEach(cartItem => { %>
-            <li class="cart-item">
+            <li>
               <h2><%= cartItem.name %></h2>
               <img src="<%= cartItem.image %>" alt="<%= cartItem.name %> Image" width="150">
               <p><strong>Quantity:</strong> <%= cartItem.quantity %></p>
+              <p><strong>Size:</strong> <%= cartItem.size %></p> <!-- Display the selected size -->
               <p><strong>Price:</strong> $<%= (cartItem.price_in_cents * cartItem.quantity) / 100 %></p>
-              <!-- Add more details based on your equipment schema -->
             </li>
           <% }) %>
         </ul>
