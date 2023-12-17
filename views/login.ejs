@@ -8,7 +8,20 @@
   <title>Hockey Shop - Login</title>
   <link rel="stylesheet" type="text/css" href="/public/styles.css">
   <link rel="icon" type="image/png" href="/public/images/LogoHockeyLogo2.png" />
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f2f2f2; /* Set a background color for the body */
+    }
 
+    p {
+      text-align: center; /* Center the paragraph text */
+    }
+  </style>
 </head>
 
 <body>
@@ -20,8 +33,8 @@
 
 
   </header>
-  <div class="login-form">
-    <h1>Login</h1>
+  <div class="login-container">
+    <h1 class="login-h1">Login</h1>
 
     <% if (error) { %>
       <p style="color: red;">
@@ -29,7 +42,7 @@
       </p>
       <% } %>
 
-        <form action="/login" method="post">
+        <form class="login-form" action="/login" method="post">
           <!-- Email/Phone Number Field -->
           <label class="login-label-email" for="emailOrPhone">Email:</label>
           <input class="login-input-email" type="text" id="emailOrPhone" name="emailOrPhone" required>

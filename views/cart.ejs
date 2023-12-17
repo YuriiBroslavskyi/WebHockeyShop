@@ -13,6 +13,7 @@
     <div class="site-name">
       <img id="TheRinkLogo" src="/public/images/TheRinkLogo-removebg-preview.png" alt="TheRinkLogo" >
     </div>
+
     <div class="header-anchors">
 
       <div class="profile-icon">
@@ -26,7 +27,7 @@
   </header>
 
   <div>
-    <h1 class="shopping-cart" >Shopping Cart</h1>
+    <h1 class="shopping-cart"  style="color: #fff; text-align: center;">Shopping Cart</h1>
     
     <% if (cart && cart.cart_items) { %>
       <% if (typeof cart.cart_items === 'string') { %>
@@ -45,25 +46,27 @@
             </li>
           <% }) %>
         </ul>
-        <form action="/complete-purchase" method="post">
-          <input type="hidden" name="cartId" value="<%= cart.id %>">
-          <button type="submit">Complete Purchase</button>
-        </form>
-        <form action="/clear-cart" method="post">
-          <button type="submit">Clear Cart</button>
-        </form>
+        <div class="cart-buttons">
+          <form action="/complete-purchase" method="post">
+            <input type="hidden" name="cartId" value="<%= cart.id %>">
+            <button type="submit">Complete Purchase</button>
+          </form>
+          <form action="/clear-cart" method="post">
+            <button type="submit">Clear Cart</button>
+          </form>
+        <% } else { %>
+          <p class="shopping-cart" style="color: #fff;">Your shopping cart is empty.</p>
+        <% } %>
       <% } else { %>
-        <p class="shopping-cart" >Your shopping cart is empty.</p>
+        <p class="shopping-cart"  style="color: red;">Error loading your shopping cart.</p>
       <% } %>
-    <% } else { %>
-      <p class="shopping-cart" >Error loading your shopping cart.</p>
-    <% } %>
-
-    <% if (error) { %>
-      <p style="color: red;"><%= error %></p>
-    <% } %>
-
-    <a class="shopping-cart" href="/">Back to All Items</a>
+  
+      <% if (error) { %>
+        <p style="color: red;"><%= error %></p>
+      <% } %>
+  
+      <a class="shopping-cart" href="/">Back to All Items</a>
+        </div>
   </div>
 </body>
 </html>

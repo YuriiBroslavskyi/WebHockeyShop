@@ -7,7 +7,20 @@
   <title>Hockey Shop - Sign Up</title>
   <link rel="stylesheet" type="text/css" href="/public/styles.css">
   <link rel="icon" type="image/png" href="/public/images/LogoHockeyLogo2.png"/>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f2f2f2; /* Set a background color for the body */
+    }
 
+    p {
+      text-align: center; /* Center the paragraph text */
+    }
+  </style>
 </head>
 <body>
   <header class = "header">
@@ -17,15 +30,15 @@
     </div>
 
   </header>
-  
+
 <div class="sign-up">
-  <h1>Sign Up</h1>
+  <h1 class="sign-up-h1">Sign Up</h1>
 
   <% if (error) { %>
     <p style="color: red;"><%= error %></p>
   <% } %>
 
-  <form action="/signup" method="post">
+  <form class="sign-up-form" action="/signup" method="post">
     <!-- Email Field -->
     <label class="register-label-email" for="email">Email:</label>
     <input class="register-input-email" type="email" id="email" name="email" required>

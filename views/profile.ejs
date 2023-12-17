@@ -1,62 +1,107 @@
+<!-- views/user-profile.ejs -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile</title>
   <link rel="stylesheet" type="text/css" href="/public/styles.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .user-profile {
+      max-width: 800px; /* Set a maximum width for the user profile content */
+      margin: 50px auto; /* Center the user profile content horizontally */
+      padding: 20px; /* Add padding for better spacing */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+      background-color: rgba(255, 255, 255, 0.8); /* Set a background color for the user profile content */
+      border-radius: 10px;
+    }
+
+    .user-profile h1,
+    .user-profile h2,
+    .user-profile h3,
+    .user-profile p {
+      margin-bottom: 10px; /* Add spacing between headings and paragraphs */
+    }
+
+    .user-profile ul {
+      list-style-type: none; /* Remove default list styles */
+      padding: 0;
+    }
+
+    .user-profile li {
+      margin-bottom: 20px; /* Add spacing between list items */
+    }
+
+    .user-profile form {
+      margin-top: 20px; /* Add spacing above the form */
+    }
+
+    .user-profile a {
+      display: block; /* Make the link a block element for better spacing */
+      margin-top: 20px; /* Add spacing above the link */
+    }
+  </style>
 </head>
+
 <body>
 
-    <header class = "header">
+  <header class="header">
 
-        <div class="site-name">
-          <img id="TheRinkLogo" src="/public/images/TheRinkLogo-removebg-preview.png" alt="TheRinkLogo" >
-        </div>
-        <div class="header-anchors">
-    
+    <div class="site-name">
+      <img id="TheRinkLogo" src="/public/images/TheRinkLogo-removebg-preview.png" alt="TheRinkLogo">
+    </div>
+    <div class="header-anchors">
+
       <div class="shopping-cart">
         <a href="/cart">
           <img src="/public/images/shopping-cart-icon.png" alt="Shopping Cart Icon" width="30">
         </a>
       </div>
-    
-        </div>
-    
-      </header>
-<div class="user-profile">
-  <h1>User Profile</h1>
 
-  <% if (user) { %>
-    <h2>Welcome, <%= user.user_email %></h2>
-    <p><strong>Email:</strong> <%= user.user_email %></p>
-    <p><strong>Registration Time:</strong> <%= user.created_at %></p>
+    </div>
 
-    <h3>Order History</h3>
-    <% if (user.orders && user.orders.length > 0) { %>
-      <ul>
-        <% user.orders.forEach(order => { %>
-          <li>
-            <p><strong>Order ID:</strong> <%= order.id %></p>
-            <p><strong>Status:</strong> <%= order.order_status %></p>
-            <p><strong>Total:</strong> $<%= (order.total_sum_in_cents / 100).toFixed(2) %></p>
-          </li>
-        <% }) %>
-      </ul>
+  </header>
+
+  <div class="user-profile">
+    <h1>User Profile</h1>
+
+    <% if (user) { %>
+      <h2>Welcome, <%= user.user_email %></h2>
+      <p><strong>Email:</strong> <%= user.user_email %></p>
+      <p><strong>Registration Time:</strong> <%= user.created_at %></p>
+
+      <h3>Order History</h3>
+      <% if (user.orders && user.orders.length > 0) { %>
+        <ul>
+          <% user.orders.forEach(order => { %>
+            <li>
+              <p><strong>Order ID:</strong> <%= order.id %></p>
+              <p><strong>Status:</strong> <%= order.order_status %></p>
+              <p><strong>Total:</strong> $<%= (order.total_sum_in_cents / 100).toFixed(2) %></p>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p>No orders yet.</p>
+      <% } %>
+
+      <form action="/change-password" method="post">
+        <button type="submit">Change Password</button>
+      </form>
+
+      <a href="/">Back to Home</a>
     <% } else { %>
-      <p>No orders yet.</p>
+      <p>Error loading user profile.</p>
     <% } %>
 
-    <form action="/change-password" method="post">
-      <button type="submit">Change Password</button>
-    </form>
-
-    <a href="/">Back to Home</a>
-  <% } else { %>
-    <p>Error loading user profile.</p>
-  <% } %>
-
-</div>
+  </div>
 
 </body>
+
 </html>

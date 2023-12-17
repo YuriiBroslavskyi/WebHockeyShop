@@ -38,13 +38,11 @@ button:hover {
 }
 
 a {
-    color: #2D54C8;
+    color: #486BD5;
     text-decoration: none;
 }
 
-.login-form {
-    margin: 10px;
-}
+
 
 /* Header styles */
 
@@ -231,4 +229,26 @@ header {
   padding: 10px;
   margin-bottom: 20px;
   box-sizing: border-box;
+}
+
+.login-container, .sign-up, .change-password {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.login-h1 , .sign-up-h1, .change-password-h1 {
+  text-align: center;
+  color: #333;
+}
+
+.login-form, .sign-up-form, .change-password-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cart-buttons {
+  margin: 10px;
 }
