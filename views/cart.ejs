@@ -26,8 +26,8 @@
   </header>
 
   <div>
-    <h1>Shopping Cart</h1>
-
+    <h1 class="shopping-cart" >Shopping Cart</h1>
+    
     <% if (cart && cart.cart_items) { %>
       <% if (typeof cart.cart_items === 'string') { %>
         <% cart.cart_items = JSON.parse(cart.cart_items); %>
@@ -46,23 +46,24 @@
           <% }) %>
         </ul>
         <form action="/complete-purchase" method="post">
+          <input type="hidden" name="cartId" value="<%= cart.id %>">
           <button type="submit">Complete Purchase</button>
         </form>
         <form action="/clear-cart" method="post">
           <button type="submit">Clear Cart</button>
         </form>
       <% } else { %>
-        <p>Your shopping cart is empty.</p>
+        <p class="shopping-cart" >Your shopping cart is empty.</p>
       <% } %>
     <% } else { %>
-      <p>Error loading your shopping cart.</p>
+      <p class="shopping-cart" >Error loading your shopping cart.</p>
     <% } %>
 
     <% if (error) { %>
       <p style="color: red;"><%= error %></p>
     <% } %>
 
-    <a href="/">Back to All Items</a>
+    <a class="shopping-cart" href="/">Back to All Items</a>
   </div>
 </body>
 </html>

@@ -63,6 +63,10 @@ app.get('/login', (req, res) => {
     res.render('login', { error: undefined });
 });
 
+app.get('/complete-purchase', (req, res) => {
+    res.render('complete-purchase');
+  });
+
 app.get('/logout', (req, res) => {
     // Clear the user session
     req.session.destroy(err => {
@@ -338,16 +342,17 @@ app.get('/cart', (req, res) => {
 // Complete purchase
 app.post('/complete-purchase', (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
+    const cartId = req.body.cartId;
 
-    // Retrieve or create the user's shopping cart
-    getOrCreateShoppingCart(userId, (cartErr, cart) => {
+    // Retrieve the user's shopping cart
+    getShoppingCartById(userId, cartId, (cartErr, cart) => {
         if (cartErr) {
             return res.status(500).send('Internal Server Error');
         }
 
-        // Update the order status in the database
-        updateOrderStatus(userId, cart.id, 'Completed', (updateErr) => {
-            if (updateErr) {
+        // Save the order to the database
+        saveOrderToDatabase(userId, cart, (saveErr, orderId) => {
+            if (saveErr) {
                 return res.status(500).send('Internal Server Error');
             }
 
@@ -357,11 +362,21 @@ app.post('/complete-purchase', (req, res) => {
                     return res.status(500).send('Internal Server Error');
                 }
 
-                res.redirect('/'); // Redirect to the main page after completing the purchase
+                // Update the order status in the shopping cart
+                updateOrderStatus(userId, cartId, 'Completed', (updateErr) => {
+                    if (updateErr) {
+                        return res.status(500).send('Internal Server Error');
+                    }
+
+                    // Redirect to the complete purchase page with the order details
+                    res.redirect(`/complete-purchase/${orderId}`);
+                });
             });
         });
     });
 });
+
+
 
 app.post('/clear-cart', (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
@@ -407,6 +422,35 @@ function hashPassword(password, callback) {
         });
     });
 }
+
+// Helper function to retrieve the user's shopping cart by ID
+function getShoppingCartById(userId, cartId, callback) {
+    const query = 'SELECT * FROM shopping_carts WHERE user_id = ? AND id = ?';
+    const values = [userId, cartId];
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error querying shopping cart by ID:', err);
+            return callback(err, null);
+        }
+
+        if (results.length === 0) {
+            // Shopping cart not found
+            return callback(null, null);
+        }
+
+        const shoppingCart = results[0];
+        try {
+            shoppingCart.cart_items = JSON.parse(shoppingCart.cart_items);
+        } catch (parseErr) {
+            console.error('Error parsing cart_items:', parseErr);
+            return callback(parseErr, null);
+        }
+
+        callback(null, shoppingCart);
+    });
+}
+
 
 // Helper function to validate a password using bcrypt with salt
 function validatePassword(inputPassword, storedHash, salt, callback) {
@@ -526,18 +570,23 @@ function updateShoppingCart(userId, cart, callback) {
     });
 }
 
-// Helper function to update the order status in the database
-function updateOrderStatus(userId, cartId, orderStatus, callback) {
-    const updateQuery = 'UPDATE shopping_carts SET order_status = ? WHERE user_id = ? AND id = ?';
-
-    db.query(updateQuery, [orderStatus, userId, cartId], (updateErr) => {
-        if (updateErr) {
-            return callback(updateErr);
-        }
-
-        callback(null);
-    });
+// Helper function to calculate the total sum of the items in the cart
+function calculateTotalSum(cartItems) {
+    return cartItems.reduce((total, item) => total + item.price_in_cents * item.quantity, 0);
 }
+
+// Helper function to update the order status in the database
+// function updateOrderStatus(userId, cartId, orderStatus, callback) {
+//     const updateQuery = 'UPDATE shopping_carts SET order_status = ? WHERE user_id = ? AND id = ?';
+
+//     db.query(updateQuery, [orderStatus, userId, cartId], (updateErr) => {
+//         if (updateErr) {
+//             return callback(updateErr);
+//         }
+
+//         callback(null);
+//     });
+// }
 
 // Helper function to clear the user's shopping cart
 function clearShoppingCart(userId, callback) {
@@ -621,6 +670,50 @@ function getUserDataById(userId, callback) {
       }
     });
   }
+
+// Placeholder function to save the order to the database
+function saveOrderToDatabase(order, callback) {
+    const query = 'INSERT INTO user_orders SET ?';
+
+    db.query(query, order, (err, results) => {
+        if (err) {
+            console.error('Error saving order to the database:', err);
+            callback(err);
+        } else {
+            callback(null);
+        }
+    });
+}
+
+// Placeholder function to clear the user's shopping cart
+function clearShoppingCart(userId, callback) {
+    const query = 'DELETE FROM shopping_carts WHERE user_id = ?';
+
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Error clearing shopping cart:', err);
+            callback(err);
+        } else {
+            callback(null);
+        }
+    });
+}
+
+// Placeholder function to update the order status
+function updateOrderStatus(userId, cartId, status, callback) {
+    const query = 'UPDATE user_orders SET order_status = ? WHERE user_id = ? AND id = ?';
+
+    db.query(query, [status, userId, cartId], (err, results) => {
+        if (err) {
+            console.error('Error updating order status:', err);
+            callback(err);
+        } else {
+            callback(null);
+        }
+    });
+}
+
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Purchase</title>
+  <link rel="stylesheet" type="text/css" href="/public/styles.css">
+  <link rel="icon" type="image/png" href="/public/images/LogoHockeyLogo2.png"/>
+  <!-- <style>
+    body {
+      background: url('/public/images/bgImagePaymentPage.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 100px auto;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .buy-h1 {
+      text-align: center;
+    }
+
+    .buy-label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .buy-input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+
+    .cvv-container {
+      position: relative;
+    }
+
+    .cvv-input {
+      width: calc(100% - 40px);
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .cvv-dots {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #333;
+    }
+
+    .buy-select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #172A63;
+      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+  </style> -->
+</head>
+<body>
+    <div class="container">
+        <h1 class="buy-h1">Complete Purchase</h1>
+        <form action="/process-payment" method="post">
+          <label class="buy-label" for="cardNumber">Card Number:</label>
+          <input class="buy-input" type="text" id="cardNumber" name="cardNumber" placeholder="Enter card number" pattern="^\d{4}-\d{4}-\d{4}-\d{4}$" required>
+    
+          <label class="buy-label" for="cvv">CVV Code:</label>
+          <div class="cvv-container">
+            <input class="buy-input" type="password" id="cvv" name="cvv" class="cvv-input" placeholder="Enter CVV code" pattern="^\d{3}$" required>
+            <div class="cvv-dots">•••</div>
+          </div>
+    
+          <label class="buy-label" for="deliveryCity">Delivery City:</label>
+          <select class="buy-select" id="deliveryCity" name="deliveryCity" required>
+            <option value="" disabled selected>Select a city</option>
+            <option value="Kyiv">Kyiv</option>
+            <option value="Kharkiv">Kharkiv</option>
+            <option value="Lviv">Lviv</option>
+            <option value="Odesa">Odesa</option>
+            <option value="Dnipro">Dnipro</option>
+            <option value="Donetsk">Donetsk</option>
+            <option value="Zaporizhia">Zaporizhia</option>
+            <option value="Kryvyi Rih">Kryvyi Rih</option>
+            <option value="Mykolaiv">Mykolaiv</option>
+            <option value="Mariupol">Mariupol</option>
+            <option value="Luhansk">Luhansk</option>
+            <option value="Vinnytsia">Vinnytsia</option>
+            <option value="Makiivka">Makiivka</option>
+            <option value="Kherson">Kherson</option>
+            <option value="Poltava">Poltava</option>
+            <option value="Chernihiv">Chernihiv</option>
+            <option value="Cherkasy">Cherkasy</option>
+            <option value="Sumy">Sumy</option>
+            <option value="Zhytomyr">Zhytomyr</option>
+            <option value="Kropyvnytskyi">Kropyvnytskyi</option>
+            <option value="Rivne">Rivne</option>
+            <option value="Ivano-Frankivsk">Ivano-Frankivsk</option>
+            <option value="Kremenchuk">Kremenchuk</option>
+            <option value="Ternopil">Ternopil</option>
+            <option value="Lutsk">Lutsk</option>
+            <option value="Bila Tserkva">Bila Tserkva</option>
+            <option value="Kramatorsk">Kramatorsk</option>
+            <option value="Melitopol">Melitopol</option>
+            <option value="Kerch">Kerch</option>
+            <option value="Uzhhorod">Uzhhorod</option>
+            <option value="Pavlohrad">Pavlohrad</option>
+            <option value="Chernivtsi">Chernivtsi</option>
+          </select>
+    
+          <button type="submit" style="width: 100%;">Buy</button>
+        </form>
+    
+        <div id="confirmationMessage" style="display: none; margin-top: 20px; text-align: center;">
+          <h2>Thank you for your purchase!</h2>
+          <p>We will process your order shortly.</p>
+        </div>
+      </div>
+</body>
+</html>

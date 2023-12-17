@@ -2,8 +2,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-}
+    background: url('/public/images/bgImagePaymentPage.jpg') no-repeat center center fixed;
+  }
 
 ul {
     list-style: none;
@@ -20,7 +20,7 @@ li {
 }
 
 button {
-    background-color: #FCBF49;
+    background-color: #172A63;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -34,7 +34,7 @@ button {
 }
 
 button:hover {
-    background-color: #FCB322;
+    background-color: #132353;
 }
 
 a {
@@ -108,7 +108,7 @@ header {
   text-align: center;
   min-width: 250px;
   max-width: 250px; /* Limit width of each item */
-  box-shadow: 0 0 8px #0A122A;
+  box-shadow: 0 0 30px #fff;
   transition: transform 0.3s ease;
 }
 
@@ -164,4 +164,71 @@ header {
 .register-input-conf-password {
   display: block;
   margin: 10px;
+}
+.size-dropdown-container,
+.quantity-input-container {
+    margin-bottom: 10px;
+}
+
+.size-dropdown,
+.quantity-input,
+.item-quantity
+{
+    padding: 8px;
+    font-size: 14px;
+}
+
+.user-profile, .item-details, .change-password, .shopping-cart {
+  padding: 10px;
+}
+
+.container {
+  max-width: 400px;
+  margin: 100px auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.cvv-container {
+  position: relative;
+}
+
+.cvv-input {
+  width: calc(100% - 40px);
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.cvv-dots {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #333;
+}
+
+.buy-h1 {
+  text-align: center;
+}
+
+.buy-label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.buy-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.buy-select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
 }

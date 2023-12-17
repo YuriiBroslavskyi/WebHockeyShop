@@ -10,25 +10,57 @@
 
 </head>
 <body>
-  <h1><%= item.name %> Details</h1>
+  <header class = "header">
 
-  <img src="<%= item.image %>" alt="<%= item.name %> Image" width="300">
+    <div class="site-name">
+      <img id="TheRinkLogo" src="/public/images/TheRinkLogo-removebg-preview.png" alt="TheRinkLogo" >
+    </div>
+    <div class="header-anchors">
 
-  <p><strong>Description:</strong> <%= item.description %></p>
-  <p><strong>Price:</strong> $<%= item.price_in_cents / 100 %></p>
-  <p><strong>Category:</strong> <%= item.category %></p>
-  <p><strong>Rating:</strong> <%= item.rating %></p>
+      <div class="profile-icon">
+        <a href="/profile">
+          <img src="/public/images/profileIcon.png" alt="Profile Icon" width="30">
+        </a>
+      </div>
 
-  <!-- Add more details based on your equipment schema -->
+      <div class="shopping-cart">
+        <a href="/cart">
+          <img src="/public/images/shopping-cart-icon.png" alt="Shopping Cart Icon" width="30">
+        </a>
+      </div>
 
-  <form action="/add-to-cart" method="post">
-    <input type="hidden" name="userId" value="<%= user ? user.id : '' %>">
-    <input type="hidden" name="itemId" value="<%= item.id %>">
-    <input type="number" name="quantity" value="1" min="1">
-    <button type="submit">Add to Cart</button>
-  </form>
+    </div>
 
-  <a href="/">Back to All Items</a>
+    <div class="user-welcome">
+      <% if (user) { %>
+        <p>Welcome, <%= user.email %>! <a href="/logout">Logout</a></p>
+      <% } else { %>
+        <p>You are not logged in. <a href="/login">Login</a> | <a href="/signup">Sign Up</a></p>
+      <% } %>
+    </div>
+  </header>
 
+  <div class="item-details">
+    <h1><%= item.name %> Details</h1>
+
+    <img src="<%= item.image %>" alt="<%= item.name %> Image" width="300">
+  
+    <p><strong>Description:</strong> <%= item.description %></p>
+    <p><strong>Price:</strong> $<%= item.price_in_cents / 100 %></p>
+    <p><strong>Category:</strong> <%= item.category %></p>
+    <p><strong>Rating:</strong> <%= item.rating %></p>
+  
+    <!-- Add more details based on your equipment schema -->
+  
+    <form action="/add-to-cart" method="post">
+      <input type="hidden" name="userId" value="<%= user ? user.id : '' %>">
+      <input type="hidden" name="itemId" value="<%= item.id %>">
+      <input class="item-quantity" type="number" name="quantity" value="1" min="1">
+      <button type="submit">Add to Cart</button>
+    </form>
+  
+    <a href="/">Back to All Items</a>
+  
+  </div>
 </body>
 </html>
