@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const path = require('path'); 
+const path = require('path');
 
 app.set('view engine', 'ejs');
 app.use('/public', express.static(path.join(__dirname, 'public')));
@@ -94,7 +94,6 @@ app.get('/profile', (req, res) => {
     });
 });
 
-// Add this route to your existing code
 app.get('/change-password', (req, res) => {
     // Check if the user is logged in
     if (req.session.user) {
@@ -106,8 +105,8 @@ app.get('/change-password', (req, res) => {
     }
 });
 
-  
-  app.post('/change-password', (req, res) => {
+
+app.post('/change-password', (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
     const currentPassword = req.body.currentPassword;
     const newPassword = req.body.newPassword;
@@ -116,54 +115,54 @@ app.get('/change-password', (req, res) => {
 
     // Check if the user is logged in
     if (!userEmail) {
-      return res.status(401).render('change_password', { user: null, error: 'You are not logged in.' });
+        return res.status(401).render('change_password', { user: null, error: 'You are not logged in.' });
     }
-  
+
     // Validate the input
     if (!currentPassword || !newPassword || !confirmPassword) {
-      return res.status(400).render('change_password', { user: req.session.user, error: 'All fields are required.' });
+        return res.status(400).render('change_password', { user: req.session.user, error: 'All fields are required.' });
     }
-  
+
     // Retrieve user data from the database
     getUserDataById(userId, (getUserErr, user) => {
-      if (getUserErr) {
-        return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
-      }
-  
-      // Validate the current password
-      validatePassword(currentPassword, user.password_hash, user.password_salt, (validateErr, passwordMatch) => {
-        if (validateErr) {
-          return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
-        }
-  
-        if (!passwordMatch) {
-          return res.render('change_password', { user: req.session.user, error: 'Current password is incorrect.' });
-        }
-  
-        // Validate the new password
-        if (newPassword !== confirmPassword) {
-          return res.render('change_password', { user: req.session.user, error: 'New passwords do not match.' });
-        }
-  
-        // Hash the new password
-        hashPassword(newPassword, (hashErr, hashedPassword, salt) => {
-          if (hashErr) {
+        if (getUserErr) {
             return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
-          }
-  
-          // Update the user's password in the database
-          updateUserPassword(userId, hashedPassword, salt, (updateErr) => {
-            if (updateErr) {
-              return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
+        }
+
+        // Validate the current password
+        validatePassword(currentPassword, user.password_hash, user.password_salt, (validateErr, passwordMatch) => {
+            if (validateErr) {
+                return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
             }
-  
-            // Redirect to the profile page or home after successful password change
-            res.redirect('/profile');
-          });
+
+            if (!passwordMatch) {
+                return res.render('change_password', { user: req.session.user, error: 'Current password is incorrect.' });
+            }
+
+            // Validate the new password
+            if (newPassword !== confirmPassword) {
+                return res.render('change_password', { user: req.session.user, error: 'New passwords do not match.' });
+            }
+
+            // Hash the new password
+            hashPassword(newPassword, (hashErr, hashedPassword, salt) => {
+                if (hashErr) {
+                    return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
+                }
+
+                // Update the user's password in the database
+                updateUserPassword(userId, hashedPassword, salt, (updateErr) => {
+                    if (updateErr) {
+                        return res.status(500).render('change_password', { user: req.session.user, error: 'Internal Server Error' });
+                    }
+
+                    // Redirect to the profile page or home after successful password change
+                    res.redirect('/profile');
+                });
+            });
         });
-      });
     });
-  });
+});
 
 // Handle login form submission
 app.post('/login', (req, res) => {
@@ -243,7 +242,6 @@ app.post('/signup', (req, res) => {
         });
     });
 });
-// Add item to shopping cart
 
 // Handle form submission for adding items to the cart
 app.post('/add-to-cart', (req, res) => {
@@ -294,8 +292,6 @@ app.post('/add-to-cart', (req, res) => {
     });
 });
 
-
-
 // View shopping cart
 app.get('/cart', (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
@@ -318,7 +314,7 @@ app.get('/cart', (req, res) => {
                     if (itemErr) {
                         reject(itemErr);
                     } else {
-                        resolve({ ...cartItem, image: item.image});
+                        resolve({ ...cartItem, image: item.image });
                     }
                 });
             });
@@ -345,9 +341,22 @@ app.post('/complete-purchase', (req, res) => {
             return res.status(500).send('Internal Server Error');
         }
 
-        // Update the order status in the database
-        updateOrderStatus(userId, cart.id, 'Completed', (updateErr) => {
-            if (updateErr) {
+        // Calculate the total sum of the items in the cart
+        const totalSumInCents = calculateTotal(cart.cart_items);
+
+        // Prepare the order data
+        const orderData = {
+            user_id: userId,
+            ordered_items: JSON.stringify(cart.cart_items), // Convert items to JSON string
+            order_status: 'Completed',
+            total_sum_in_cents: totalSumInCents,
+            payment_method: req.body.paymentMethod,
+            transaction_id: req.body.transactionId,
+        };
+
+        // Save the order data to the database
+        saveOrderToDatabase(orderData, (saveOrderErr) => {
+            if (saveOrderErr) {
                 return res.status(500).send('Internal Server Error');
             }
 
@@ -362,6 +371,7 @@ app.post('/complete-purchase', (req, res) => {
         });
     });
 });
+
 
 app.post('/clear-cart', (req, res) => {
     const userId = req.session.user ? req.session.user.id : null;
@@ -393,8 +403,6 @@ app.get('/item/:id', (req, res) => {
         }
     });
 });
-
-// Continue with other routes and app configurations...
 
 // Helper function to hash a password using bcrypt with salt
 function hashPassword(password, callback) {
@@ -579,47 +587,66 @@ function getUserDataAndOrders(userId, callback) {
     });
 }
 
-// Helper function to clear the user's shopping cart
-// function clearShoppingCart(userId, callback) {
-//     const updateQuery = 'UPDATE shopping_carts SET cart_items = ? WHERE user_id = ? AND order_status = ?';
-
-//     // Clear the cart_items in the database
-//     db.query(updateQuery, ['[]', userId, 'In Progress'], (updateErr) => {
-//         if (updateErr) {
-//             return callback(updateErr);
-//         }
-
-//         callback(null);
-//     });
-// }
-
 // Helper function to retrieve user data by ID from the database
 function getUserDataById(userId, callback) {
     const query = 'SELECT * FROM user_info WHERE id = ?';
-  
+
     db.query(query, [userId], (err, results) => {
-      if (err) {
-        console.error('Error querying user data from the database:', err);
-        callback(err, null);
-      } else {
-        const user = results[0];
-        callback(null, user);
-      }
+        if (err) {
+            console.error('Error querying user data from the database:', err);
+            callback(err, null);
+        } else {
+            const user = results[0];
+            callback(null, user);
+        }
     });
-  }
-  
-  // Helper function to update the user's password in the database
-  function updateUserPassword(userId, hashedPassword, salt, callback) {
+}
+
+// Helper function to update the user's password in the database
+function updateUserPassword(userId, hashedPassword, salt, callback) {
     const updateQuery = 'UPDATE user_info SET password_hash = ?, password_salt = ? WHERE id = ?';
-  
+
     db.query(updateQuery, [hashedPassword, salt, userId], (updateErr) => {
-      if (updateErr) {
-        callback(updateErr);
-      } else {
-        callback(null);
-      }
+        if (updateErr) {
+            callback(updateErr);
+        } else {
+            callback(null);
+        }
     });
-  }
+}
+
+// Function to calculate the total sum of items in the cart
+function calculateTotal(cartItems) {
+    return cartItems.reduce((total, item) => {
+        return total + item.quantity * item.price_in_cents;
+    }, 0);
+}
+
+// Function to save order data to the database
+function saveOrderToDatabase(orderData, callback) {
+    const sql = 'INSERT INTO user_orders (user_id, ordered_items, order_status, total_sum_in_cents, payment_method, transaction_id) VALUES (?, ?, ?, ?, ?, ?)';
+
+    // Extract values from orderData
+    const values = [
+        orderData.user_id,
+        orderData.ordered_items,
+        orderData.order_status,
+        orderData.total_sum_in_cents,
+        orderData.payment_method,
+        orderData.transaction_id
+    ];
+
+    // Execute the SQL query
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            return callback(err);
+        }
+
+        // If the insertion was successful, invoke the callback with no error
+        callback(null);
+    });
+}
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

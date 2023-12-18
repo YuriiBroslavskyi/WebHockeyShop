@@ -1,111 +1,110 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: url('/public/images/bgImagePaymentPage.jpg') no-repeat center center fixed;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: url('/public/images/bgImagePaymentPage.jpg') no-repeat center center fixed;
+}
 
 ul {
-    list-style: none;
-    padding: 5px;
-    display:inline-block;
+  list-style: none;
+  padding: 5px;
+  display: inline-block;
 }
 
 li {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 button {
-    background-color: #172A63;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
+  background-color: #172A63;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 button:hover {
-    background-color: #132353;
+  background-color: #132353;
 }
 
 a {
-    color: #486BD5;
-    text-decoration: none;
+  color: #486BD5;
+  text-decoration: none;
 }
-
-
-
-/* Header styles */
 
 header {
-    margin: 0;
-    padding: 10px;
-    background-color: #0A122A;
-    color: white;
-    text-align: center;
-    align-items: flex-start;
-    justify-content: space-between;
-    display: flex;
-    position: relative;
+  margin: 0;
+  padding: 10px;
+  background-color: #0A122A;
+  color: white;
+  text-align: center;
+  align-items: flex-start;
+  justify-content: space-between;
+  display: flex;
+  position: relative;
 }
 
-#TheRinkLogo{
-    width: 125px;
-    height: 125px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+#TheRinkLogo {
+  width: 125px;
+  height: 125px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
 .equipment-item:hover {
   transform: scale(1.05);
 }
 
-.header-anchors{
-    position: absolute; /* Set the shopping cart as an absolute positioned element */
-    bottom: 0;
-    right: 0;
-    margin: 10px; /* Adjust the margin as needed */
-    margin: 10px;
-    color: #fff;
-    display: flex;
-    gap: 50px;
-}
-.user-welcome{
-    text-align: right;
-    margin: 0;
+.header-anchors {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+  margin: 10px;
+  color: #fff;
+  display: flex;
+  gap: 50px;
 }
 
-/* Main content styles */
+.user-welcome {
+  text-align: right;
+  margin: 0;
+}
+
 .all-items-header {
   text-align: center;
   margin-top: 20px;
 }
 
-.equipment-list, .cart-item-list {
+.equipment-list,
+.cart-item-list {
   list-style: none;
   padding: 0;
-  display: flex; /* Display items in a row */
-  flex-wrap: wrap; /* Allow items to wrap to the next row */
-  justify-content: space-around; /* Center items horizontally with space around */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
-.equipment-item, .cart-item {
+.equipment-item,
+.cart-item {
   background-color: #fff;
   border: 1px solid #ddd;
   margin: 10px;
   padding: 20px;
   text-align: center;
   min-width: 250px;
-  max-width: 250px; /* Limit width of each item */
+  max-width: 250px;
   box-shadow: 0 0 30px #fff;
   transition: transform 0.3s ease;
 }
@@ -150,33 +149,38 @@ header {
   color: #333;
 }
 
-.login-label-email, 
-.login-input-email, 
-.login-label-password, 
-.login-label-password, 
-.register-label-email, 
-.register-input-email, 
-.register-label-password, 
-.register-input-password, 
-.register-label-conf-password, 
+.login-label-email,
+.login-input-email,
+.login-label-password,
+.login-label-password,
+.register-label-email,
+.register-input-email,
+.register-label-password,
+.register-input-password,
+.register-label-conf-password,
 .register-input-conf-password {
   display: block;
   margin: 10px;
 }
+
 .size-dropdown-container,
 .quantity-input-container {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .size-dropdown,
 .quantity-input,
-.item-quantity
-{
-    padding: 8px;
-    font-size: 14px;
+.item-quantity {
+  padding: 8px;
+  font-size: 14px;
 }
 
-.user-profile, .item-details, .change-password, .shopping-cart {
+.user-profile,
+.item-details,
+.change-password,
+.shopping-cart,
+.shopping-cart-p,
+.shopping-cart-a {
   padding: 10px;
 }
 
@@ -231,24 +235,30 @@ header {
   box-sizing: border-box;
 }
 
-.login-container, .sign-up, .change-password {
+.login-container,
+.sign-up,
+.change-password {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 20px;
   border-radius: 10px;
   width: 300px;
 }
 
-.login-h1 , .sign-up-h1, .change-password-h1 {
+.login-h1,
+.sign-up-h1,
+.change-password-h1 {
   text-align: center;
   color: #333;
 }
 
-.login-form, .sign-up-form, .change-password-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.login-form,
+.sign-up-form,
+.change-password-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .cart-buttons {
-  margin: 10px;
+  margin: 20px;
 }

@@ -1,17 +1,32 @@
-<!-- views/cart.ejs -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hockey Shop - Shopping Cart</title>
   <link rel="stylesheet" type="text/css" href="/public/styles.css">
+  <style>
+    .shopping-cart-a,
+    .shopping-cart-p {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      width: 200px;
+      margin: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 10px;
+    }
+  </style>
 </head>
+
 <body>
-  <header class = "header">
+  <header class="header">
 
     <div class="site-name">
-      <img id="TheRinkLogo" src="/public/images/TheRinkLogo-removebg-preview.png" alt="TheRinkLogo" >
+      <img id="TheRinkLogo" src="/public/images/TheRinkLogo-removebg-preview.png" alt="TheRinkLogo">
     </div>
 
     <div class="header-anchors">
@@ -27,46 +42,56 @@
   </header>
 
   <div>
-    <h1 class="shopping-cart"  style="color: #fff; text-align: center;">Shopping Cart</h1>
-    
-    <% if (cart && cart.cart_items) { %>
-      <% if (typeof cart.cart_items === 'string') { %>
-        <% cart.cart_items = JSON.parse(cart.cart_items); %>
-      <% } %>
+    <h1 class="shopping-cart" style="color: #fff; text-align: center;">Shopping Cart</h1>
 
-      <% if (cart.cart_items.length > 0) { %>
-        <ul class="cart-item-list">
-          <% cart.cart_items.forEach(cartItem => { %>
-            <li>
-              <h2><%= cartItem.name %></h2>
-              <img src="<%= cartItem.image %>" alt="<%= cartItem.name %> Image" width="150">
-              <p><strong>Quantity:</strong> <%= cartItem.quantity %></p>
-              <p><strong>Size:</strong> <%= cartItem.size %></p> <!-- Display the selected size -->
-              <p><strong>Price:</strong> $<%= (cartItem.price_in_cents * cartItem.quantity) / 100 %></p>
-            </li>
-          <% }) %>
-        </ul>
-        <div class="cart-buttons">
-          <form action="/complete-purchase" method="post">
-            <input type="hidden" name="cartId" value="<%= cart.id %>">
-            <button type="submit">Complete Purchase</button>
-          </form>
-          <form action="/clear-cart" method="post">
-            <button type="submit">Clear Cart</button>
-          </form>
-        <% } else { %>
-          <p class="shopping-cart" style="color: #fff;">Your shopping cart is empty.</p>
-        <% } %>
-      <% } else { %>
-        <p class="shopping-cart"  style="color: red;">Error loading your shopping cart.</p>
-      <% } %>
-  
-      <% if (error) { %>
-        <p style="color: red;"><%= error %></p>
-      <% } %>
-  
-      <a class="shopping-cart" href="/">Back to All Items</a>
-        </div>
+    <% if (cart && cart.cart_items) { %>
+      <% if (typeof cart.cart_items==='string' ) { %>
+        <% cart.cart_items=JSON.parse(cart.cart_items); %>
+          <% } %>
+
+            <% if (cart.cart_items.length> 0) { %>
+              <ul class="cart-item-list">
+                <% cart.cart_items.forEach(cartItem=> { %>
+                  <li>
+                    <h2>
+                      <%= cartItem.name %>
+                    </h2>
+                    <img src="<%= cartItem.image %>" alt="<%= cartItem.name %> Image" width="150">
+                    <p><strong>Quantity:</strong>
+                      <%= cartItem.quantity %>
+                    </p>
+                    <p><strong>Size:</strong>
+                      <%= cartItem.size %>
+                    </p> <!-- Display the selected size -->
+                    <p><strong>Price:</strong> $<%= (cartItem.price_in_cents * cartItem.quantity) / 100 %>
+                    </p>
+                  </li>
+                  <% }) %>
+              </ul>
+              <div class="cart-buttons">
+                <form action="/complete-purchase" method="post">
+                  <input type="hidden" name="cartId" value="<%= cart.id %>">
+                  <button type="submit">Complete Purchase</button>
+                </form>
+                <form action="/clear-cart" method="post">
+                  <button type="submit">Clear Cart</button>
+                </form>
+                <% } else { %>
+                  <p class="shopping-cart-p" style="color: red;">Your shopping cart is empty.</p>
+                  <% } %>
+                    <% } else { %>
+                      <p class="shopping-cart" style="color: red;">Error loading your shopping cart.</p>
+                      <% } %>
+
+                        <% if (error) { %>
+                          <p style="color: red;">
+                            <%= error %>
+                          </p>
+                          <% } %>
+
+                            <a class="shopping-cart-a" href="/">Back to All Items</a>
+              </div>
   </div>
 </body>
+
 </html>

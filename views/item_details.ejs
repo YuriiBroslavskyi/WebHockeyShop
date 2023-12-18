@@ -1,4 +1,3 @@
-<!-- views/item_details.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,9 +48,7 @@
     <p><strong>Price:</strong> $<%= item.price_in_cents / 100 %></p>
     <p><strong>Category:</strong> <%= item.category %></p>
     <p><strong>Rating:</strong> <%= item.rating %></p>
-  
-    <!-- Add more details based on your equipment schema -->
-  
+ 
     <form action="/add-to-cart" method="post">
       <input type="hidden" name="userId" value="<%= user ? user.id : '' %>">
       <input type="hidden" name="itemId" value="<%= item.id %>">
